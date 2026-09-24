@@ -1,0 +1,18 @@
+pool: default
+
+trigger:
+  branches:
+    include:
+      - feature/*
+
+stages:
+- stage: TerraformInitAndValidation
+  displayName: Terraform Init And Validation
+
+  jobs:
+  - job: TerraformInit
+    displayName: Terraform Init
+    
+    steps:
+    
+
