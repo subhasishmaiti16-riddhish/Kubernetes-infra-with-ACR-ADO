@@ -25,11 +25,13 @@ stages:
       inputs:
         terraformVersion: '1.16.4'
 
-    - powershell: |
-        Write-Host "Terraform test"
-        & "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" version
-        Set-Location "$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment"
-        & "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" init
+    - script: |
+        echo Testing Terraform
+        "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" version
+
+        cd /d "$(System.DefaultWorkingDirectory)\kubernetes-infra\Environment"
+
+        "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" init
       displayName: Test Terraform Init Directly
       
     - task: TerraformTask@5
