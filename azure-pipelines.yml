@@ -100,10 +100,7 @@ stages:
   displayName: Terraform Apply
   dependsOn: TerraformPlan
 
-  condition: and(
-    succeeded(),
-    eq(variables['Build.SourceBranch'], 'refs/heads/main')
-  )
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
   jobs:
   - job: TerraformApply
