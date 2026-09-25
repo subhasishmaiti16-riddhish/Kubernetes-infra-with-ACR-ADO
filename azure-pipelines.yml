@@ -23,8 +23,15 @@ stages:
     - task: TerraformInstaller@1
       displayName: Install Terraform
       inputs:
-        terraformVersion: 'latest'
+        terraformVersion: '1.16.4'
 
+    - powershell: |
+        Write-Host "Terraform test"
+        & "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" version
+        Set-Location "$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment"
+        & "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" init
+      displayName: Test Terraform Init Directly
+      
     - task: TerraformTask@5
       displayName: Terraform Init
       inputs:
