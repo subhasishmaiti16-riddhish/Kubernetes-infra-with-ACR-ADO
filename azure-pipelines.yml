@@ -25,7 +25,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Environment'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
         backendServiceArm: 'azure-pipeline-yaml'
         backendAzureRmResourceGroupName: 'state-file-rg'
         backendAzureRmStorageAccountName: 'statefileaccountfork8s'
@@ -37,7 +37,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Environment'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
 
 
 # =========================================================
@@ -77,7 +77,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Environment'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
         backendServiceArm: 'azure-pipeline-yaml'
         backendAzureRmResourceGroupName: 'state-file-rg'
         backendAzureRmStorageAccountName: 'statefileaccountfork8s'
@@ -89,7 +89,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Environment'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
         environmentServiceNameAzureRM: 'azure-pipeline-yaml'
 
 
@@ -113,7 +113,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Environment'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
         backendServiceArm: 'azure-pipeline-yaml'
         backendAzureRmResourceGroupName: 'state-file-rg'
         backendAzureRmStorageAccountName: 'statefileaccountfork8s'
@@ -125,5 +125,5 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/Environment'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
         environmentServiceNameAzureRM: 'azure-pipeline-yaml'
