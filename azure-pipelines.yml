@@ -1,4 +1,4 @@
-pool: default
+pool: pipeline-ADO
 
 trigger:
   branches:
@@ -25,15 +25,6 @@ stages:
       inputs:
         terraformVersion: '1.16.4'
 
-    - script: |
-        echo Testing Terraform
-        "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" version
-
-        cd /d "$(System.DefaultWorkingDirectory)\kubernetes-infra\Environment"
-
-        "C:\agent1\_work\_tool\terraform\1.16.4\x64\terraform.exe" init
-      displayName: Test Terraform Init Directly
-      
     - task: TerraformTask@5
       displayName: Terraform Init
       inputs:
