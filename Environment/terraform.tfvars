@@ -26,12 +26,6 @@ k8s-env-subnet = {
     rg_name          = "k8s-rgs"
     address_prefixes = ["10.0.0.2/24"]
   }
-  k8s-subnet3 = {
-    subnet_name      = "k8s-subnet1"
-    vnet_name        = "k8s-vnet"
-    rg_name          = "k8s-rgs"
-    address_prefixes = ["10.0.0.3/24"]
-  }
 }
 k8s-env-acr = {
   k8s-acr = {
