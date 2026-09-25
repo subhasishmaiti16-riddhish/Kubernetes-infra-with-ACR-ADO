@@ -1,0 +1,134 @@
+pool: pipeline-ADO
+
+trigger:
+  branches:
+    include:
+      - feature/*
+      - main
+
+stages:
+
+# =========================================================
+# 1. Terraform Init + Validate
+# =========================================================
+- stage: TerraformInitAndValidation
+  displayName: Terraform Init And Validation
+
+  jobs:
+  - job: TerraformInitAndValidation
+    displayName: Terraform Init And Validation
+
+    steps:
+    
+    - task: TerraformInstaller@1
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: '1.16.4'
+
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
+        backendServiceArm: 'azure-pipeline-yaml'
+        backendAzureRmResourceGroupName: 'state-file-rg'
+        backendAzureRmStorageAccountName: 'statefileaccountfork8s'
+        backendAzureRmContainerName: 'statefilestorage'
+        backendAzureRmKey: 'kubernetes.statefilestorage'
+
+    - task: TerraformTask@5
+      displayName: Terraform Validate
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
+
+
+# =========================================================
+# 2. Security Scan
+# =========================================================
+- stage: SecurityScan
+  displayName: Security Scan
+  dependsOn: TerraformInitAndValidation
+
+  jobs:
+  - job: SecurityScan
+    displayName: Security Scan
+
+    steps:
+
+    - script: |
+        curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+        tfsec $(System.DefaultWorkingDirectory)/Environment --format lovely
+      displayName: Run Tfsec Scan
+
+
+# =========================================================
+# 3. Terraform Plan
+# =========================================================
+- stage: TerraformPlan
+  displayName: Terraform Plan
+  dependsOn: SecurityScan
+
+  jobs:
+  - job: TerraformPlan
+    displayName: Terraform Plan
+
+    steps:
+
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
+        backendServiceArm: 'azure-pipeline-yaml'
+        backendAzureRmResourceGroupName: 'state-file-rg'
+        backendAzureRmStorageAccountName: 'statefileaccountfork8s'
+        backendAzureRmContainerName: 'statefilestorage'
+        backendAzureRmKey: 'kubernetes.statefilestorage'
+
+    - task: TerraformTask@5
+      displayName: Terraform Plan
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
+        environmentServiceNameAzureRM: 'azure-pipeline-yaml'
+
+
+# =========================================================
+# 4. Terraform Apply - ONLY on main
+# =========================================================
+- stage: TerraformApply
+  displayName: Terraform Apply
+  dependsOn: TerraformPlan
+
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+  jobs:
+  - job: TerraformApply
+    displayName: Terraform Apply
+
+    steps:
+
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
+        backendServiceArm: 'azure-pipeline-yaml'
+        backendAzureRmResourceGroupName: 'state-file-rg'
+        backendAzureRmStorageAccountName: 'statefileaccountfork8s'
+        backendAzureRmContainerName: 'statefilestorage'
+        backendAzureRmKey: 'kubernetes.statefilestorage'
+
+    - task: TerraformTask@5
+      displayName: Terraform Apply
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes-infra/Environment'
+        environmentServiceNameAzureRM: 'azure-pipeline-yaml'
