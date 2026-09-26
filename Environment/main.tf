@@ -4,7 +4,7 @@ module "k8s-env-rgs" {
 }
 
 module "k8s-env-vnet" {
-    depends_on = [ var.k8s-env-rgs ]
+    depends_on = [ module.k8s-env-rgs ]
   source = "../child/vnet"
   k8s-vnet = var.k8s-env-vnet
 }
