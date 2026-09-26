@@ -18,13 +18,13 @@ k8s-env-subnet = {
     subnet_name      = "k8s-subnet"
     vnet_name        = "k8s-vnet"
     rg_name          = "k8s-rgs"
-    address_prefixes = ["10.0.0.1/24"]
+    address_prefixes = ["10.0.1.0/24"]
   }
   k8s-subnet2 = {
     subnet_name      = "AzureApplicationGateway"
     vnet_name        = "k8s-vnet"
     rg_name          = "k8s-rgs"
-    address_prefixes = ["10.0.0.2/24"]
+    address_prefixes = ["10.0.2.0/24"]
   }
 }
 k8s-env-acr = {
