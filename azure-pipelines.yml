@@ -59,10 +59,13 @@ stages:
     steps:
 
     - pwsh: |
-        $version = "0.58.1"   # check latest at https://github.com/aquasecurity/trivy/releases
+        $release = Invoke-RestMethod -Uri "https://api.github.com/repos/aquasecurity/trivy/releases/latest"
+        $asset = $release.assets | Where-Object { $_.name -like "*windows-64bit.zip" }
+        if (-not $asset) { throw "Could not find a windows-64bit.zip asset in the latest trivy release." }
+
         $zip = "$(Agent.TempDirectory)\trivy.zip"
         $dest = "$(Agent.TempDirectory)\trivy"
-        Invoke-WebRequest -Uri "https://github.com/aquasecurity/trivy/releases/download/v$version/trivy_${version}_windows-64bit.zip" -OutFile $zip
+        Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $zip
         Expand-Archive -Path $zip -DestinationPath $dest -Force
         echo "##vso[task.prependpath]$dest"
       displayName: Install Trivy
