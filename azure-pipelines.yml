@@ -58,10 +58,12 @@ stages:
 
     steps:
 
-    - script: |
-        curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
-        tfsec $(System.DefaultWorkingDirectory)/Environment --format lovely
-      displayName: Run Tfsec Scan
+    - script: choco install trivy -y
+      displayName: Install Trivy
+
+    - pwsh: |
+        trivy config "$(System.DefaultWorkingDirectory)/Environment" --exit-code 1 --severity HIGH,CRITICAL
+      displayName: Run Trivy Scan
 
 
 # =========================================================
