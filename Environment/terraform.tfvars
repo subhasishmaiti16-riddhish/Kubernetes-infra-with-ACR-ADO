@@ -37,9 +37,11 @@ k8s-env-acr = {
 }
 k8s-env-aks = {
   k8s-aks = {
-    aks_name  = "k8s-aks"
-    location  = "CentralIndia"
-    rg_name   = "k8s-rgs"
-    vnet_name = "k8s-vnet"
+    aks_name     = "k8s-aks"
+    location     = "Central India"
+    rg_name      = "k8s-rgs"
+
+    vnet_name    = "k8s-vnet"
+    subnet_name  = "k8s-subnet"
   }
 }
