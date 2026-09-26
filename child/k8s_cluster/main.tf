@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "k8s-aks" {
     name                 = "system"
     node_count           = 2
     vm_size              = "Standard_EC2as_v6"
-    vnet_subnet_id = data.azurerm_virtual_network.k8s-vnet[each.key].id
+    vnet_subnet_id = data.azurerm_subnet.k8s-subnet[each.key].id
   
   }
 
