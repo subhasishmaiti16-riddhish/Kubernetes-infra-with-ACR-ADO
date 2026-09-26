@@ -7,3 +7,15 @@ resource "azurerm_container_registry" "k8s-acr" {
   admin_enabled       = false
   
 }
+
+resource "azurerm_resource_provider_registration" "network" {
+  name = "Microsoft.Network"
+}
+
+resource "azurerm_resource_provider_registration" "container_registry" {
+  name = "Microsoft.ContainerRegistry"
+}
+
+resource "azurerm_resource_provider_registration" "container_service" {
+  name = "Microsoft.ContainerService"
+}
