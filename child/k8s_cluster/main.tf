@@ -12,11 +12,11 @@ resource "azurerm_kubernetes_cluster" "k8s-aks" {
   default_node_pool {
     name                 = "system"
     node_count           = 1
-    vm_size              = "Standard_EC2as_v6"
+    vm_size              = "Standard_D2s_v5"
     vnet_subnet_id = data.azurerm_subnet.k8s-subnet[each.key].id
   
   }
-  
+
   network_profile {
     network_plugin = "azure"
     service_cidr   = "10.1.0.0/16"
