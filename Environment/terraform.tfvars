@@ -29,7 +29,7 @@ k8s-env-subnet = {
 }
 k8s-env-acr = {
   k8s-acr = {
-    acr_name = "k8sacr"
+    acr_name = "subhaaksacr2026"
     rg_name  = "k8s-rgs"
     location = "CentralIndia"
     sku      = "Standard"
