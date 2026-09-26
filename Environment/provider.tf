@@ -17,4 +17,5 @@ terraform {
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {}
+  resource_provider_registrations = "core"
 }
