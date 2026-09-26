@@ -11,7 +11,7 @@ resource "azurerm_kubernetes_cluster" "k8s-aks" {
 
   default_node_pool {
     name                 = "system"
-    node_count           = 2
+    node_count           = 1
     vm_size              = "Standard_EC2as_v6"
     vnet_subnet_id = data.azurerm_subnet.k8s-subnet[each.key].id
   
