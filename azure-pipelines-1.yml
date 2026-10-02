@@ -1,0 +1,50 @@
+pool: pipeline-ADO
+
+stages:
+
+- stage: TerraformScan
+  displayName: Terraform Scan
+  jobs:
+  - job: Scan
+    pool:
+      name: pipeline-ADO
+    steps:
+    - script: echo "Terraform Scan"
+
+
+# Validate
+- stage: TerraformValidate
+  displayName: Terraform Validate
+  dependsOn: TerraformScan
+  jobs:
+  - job: Validate
+    pool:
+      name: pipeline-ADO
+    steps:
+    - script: terraform validate
+
+
+# Plan
+- stage: TerraformPlan
+  displayName: Terraform Plan
+  dependsOn: TerraformScan
+  jobs:
+  - job: Plan
+    pool:
+      name: pipeline-ADO
+    steps:
+    - script: terraform plan -out=tfplan
+
+
+# Apply
+- stage: TerraformApply
+  displayName: Terraform Apply
+  dependsOn:
+    - TerraformValidate
+    - TerraformPlan
+  jobs:
+  - job: Apply
+    pool:
+      name: pipeline-ADO
+    steps:
+    - script: terraform apply tfplan
